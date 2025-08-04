@@ -10,6 +10,9 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
@@ -18,7 +21,7 @@ import com.leilao.backend.model.Pessoa;
 import com.leilao.backend.repository.PessoaRepository;
 
 @Service
-public class PessoaService {
+public class PessoaService implements UserDetailsService {
     @Autowired
     private PessoaRepository pessoaRepository;
 
@@ -65,4 +68,8 @@ public class PessoaService {
         return pessoaRepository.findAll(pageable);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return pessoaRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Usuário " + username + " não encontrado"));
+    }
 }
