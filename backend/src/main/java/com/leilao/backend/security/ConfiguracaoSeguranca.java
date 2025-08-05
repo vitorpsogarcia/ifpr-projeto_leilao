@@ -2,6 +2,7 @@ package com.leilao.backend.security;
 
 import java.util.List;
 
+import com.leilao.backend.enums.TipoPerfil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -48,7 +49,7 @@ public class ConfiguracaoSeguranca {
             .requestMatchers("/autenticacao/**").permitAll()
             .requestMatchers("/categoria/**").permitAll()
             .requestMatchers("/leilao/public").permitAll()
-             .requestMatchers("/pessoa/**").hasRole("ADM")
+             .requestMatchers("/pessoa/**").hasRole(TipoPerfil.ADMIN.name())
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
