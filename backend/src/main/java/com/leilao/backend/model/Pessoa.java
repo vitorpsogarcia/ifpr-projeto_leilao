@@ -39,6 +39,10 @@ public class Pessoa implements UserDetails {
     private String senha;
 
     @JsonIgnore
+    @Column(unique = true, name = "cpf", length = 11, nullable = false)
+    private String cpf;
+
+    @JsonIgnore
     @Column(unique = true, name = "codigo_validacao", length = 8)
     private String codigoValidacao;
 
@@ -61,6 +65,25 @@ public class Pessoa implements UserDetails {
     )
     @Setter(AccessLevel.NONE)
     private List<PessoaPerfil> pessoaPerfil;
+
+    @OneToMany(
+      fetch = FetchType.LAZY,
+      mappedBy = "escritor",
+      targetEntity =  Feedback.class,
+      cascade = CascadeType.ALL,
+      orphanRemoval = true
+    )
+    private List<Feedback> feedbacksEscritos;
+
+
+    @OneToMany(
+      fetch = FetchType.LAZY,
+      mappedBy = "destinatario",
+      targetEntity =  Feedback.class,
+      cascade = CascadeType.ALL,
+      orphanRemoval = true
+    )
+    private List<Feedback> feedbacksDestinatario;
 
     @Column(name="criado_em")
     @CreatedDate

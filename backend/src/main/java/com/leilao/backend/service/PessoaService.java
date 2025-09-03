@@ -1,10 +1,6 @@
 package com.leilao.backend.service;
 
-import java.rmi.NoSuchObjectException;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
+import com.leilao.backend.utils.GenericUpdater;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -48,9 +44,8 @@ public class PessoaService implements UserDetailsService {
     public Pessoa alterar(Pessoa pessoa) {
         // return pessoaRepository.save(pessoa);
         Pessoa pessoaBanco = buscarPorId(pessoa.getId());
-        pessoaBanco.setNome(pessoa.getNome());
-        pessoaBanco.setEmail(pessoa.getEmail());
-        return pessoaRepository.save(pessoaBanco);
+        Pessoa pessoaAtualizada = GenericUpdater.atualizaCampos(pessoaBanco, pessoa);
+        return pessoaRepository.save(pessoaAtualizada);
     }
 
     public void excluir(Long id) {

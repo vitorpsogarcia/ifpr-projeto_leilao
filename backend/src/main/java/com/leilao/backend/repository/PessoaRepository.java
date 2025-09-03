@@ -16,5 +16,9 @@ public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
     @Query("from Pessoa where email=:email")
     public Page<Pessoa> buscarEmail(@Param("email") String email, Pageable pageable);
 
+    @Query("from Pessoa where cpf=:cpf")
+    public Page<Pessoa> buscarCpf(@Param("cpf") String cpf, Pageable pageable);
+
     Optional<Pessoa> findByEmail(String email);
+    Optional<Pessoa> findByCpf(String cpf);
 }

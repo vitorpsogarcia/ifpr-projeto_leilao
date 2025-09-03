@@ -40,9 +40,4 @@ public class Perfil {
     @Column(name="excluido_em", nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Date excluidoEm;
-
-    public Perfil atualizaValores(Perfil perfilAtualizado) {
-        this.setTipo(perfilAtualizado.getTipo());
-        return this;
-    }
 }
