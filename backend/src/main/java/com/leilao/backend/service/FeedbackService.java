@@ -3,7 +3,6 @@ package com.leilao.backend.service;
 import com.leilao.backend.dto.FeedbackDTO;
 import com.leilao.backend.exception.NaoEncontradoExcecao;
 import com.leilao.backend.model.Feedback;
-import com.leilao.backend.model.Feedback;
 import com.leilao.backend.model.Pessoa;
 import com.leilao.backend.repository.FeedbackRepository;
 import com.leilao.backend.repository.PessoaRepository;

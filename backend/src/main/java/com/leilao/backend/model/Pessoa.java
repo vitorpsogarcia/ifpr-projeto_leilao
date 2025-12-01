@@ -85,6 +85,33 @@ public class Pessoa implements UserDetails {
     )
     private List<Feedback> feedbacksDestinatario;
 
+    @OneToMany(
+      fetch = FetchType.LAZY,
+      mappedBy = "pessoa",
+      targetEntity =  Categoria.class,
+      cascade = CascadeType.ALL,
+      orphanRemoval = true
+    )
+    private List<Categoria> categorias;
+
+    @OneToMany(
+      fetch = FetchType.LAZY,
+      mappedBy = "pessoa",
+      targetEntity =  Leilao.class,
+      cascade = CascadeType.ALL,
+      orphanRemoval = true
+    )
+    private List<Leilao> leiloes;
+
+    @OneToMany(
+      fetch = FetchType.LAZY,
+      mappedBy = "pessoa",
+      targetEntity =  Lance.class,
+      cascade = CascadeType.ALL,
+      orphanRemoval = true
+    )
+    private List<Lance> lances;
+
     @Column(name="criado_em")
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)

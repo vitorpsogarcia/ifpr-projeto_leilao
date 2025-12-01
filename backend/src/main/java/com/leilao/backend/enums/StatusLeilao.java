@@ -6,3 +6,4 @@ public enum StatusLeilao {
     CANCELADO,
     EM_ANALISE
 }
+

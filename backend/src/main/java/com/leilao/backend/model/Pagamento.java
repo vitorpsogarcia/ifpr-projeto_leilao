@@ -6,25 +6,28 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
 @Data
-@Table(name = "pessoa_perfil")
+@Table(name = "pagamento")
 @EntityListeners(AuditingEntityListener.class)
-public class PessoaPerfil {
+public class Pagamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "pessoa_id")
-    private Pessoa pessoa;
+    private Float valor;
 
-    @ManyToOne
-    @JoinColumn(name = "perfil_id")
-    private Perfil perfil;
+    private LocalDateTime dataHora;
+
+    private String status;
+
+    @OneToOne
+    @JoinColumn(name = "leilao_id")
+    private Leilao leilao;
 
     @Column(name="criado_em")
     @CreatedDate

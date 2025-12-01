@@ -10,21 +10,21 @@ import java.util.Date;
 
 @Entity
 @Data
-@Table(name = "pessoa_perfil")
+@Table(name = "categoria")
 @EntityListeners(AuditingEntityListener.class)
-public class PessoaPerfil {
+public class Categoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private String nome;
+
+    private String observacao;
+
     @ManyToOne
     @JoinColumn(name = "pessoa_id")
     private Pessoa pessoa;
-
-    @ManyToOne
-    @JoinColumn(name = "perfil_id")
-    private Perfil perfil;
 
     @Column(name="criado_em")
     @CreatedDate
