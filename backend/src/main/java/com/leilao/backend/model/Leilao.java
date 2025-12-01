@@ -2,6 +2,7 @@ package com.leilao.backend.model;
 
 import com.leilao.backend.enums.StatusLeilao;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -21,24 +22,33 @@ public class Leilao {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotBlank(message = "O título do leilão é obrigatório")
+    @Size(min = 5, max = 150, message = "O título do leilão deve ter entre 5 e 150 caracteres")
     private String titulo;
 
+    @NotBlank(message = "A descrição do leilão é obrigatória")
+    @Size(max = 255, message = "A descrição deve ter no máximo 255 caracteres")
     private String descricao;
 
     @Lob
     private String descricaoDetalhada;
 
+    @Future(message = "A data de início do leilão deve ser no futuro")
     private LocalDateTime dataHoraInicio;
 
+    @Future(message = "A data de fim do leilão deve ser no futuro")
     private LocalDateTime dataHoraFim;
 
     @Enumerated(EnumType.STRING)
     private StatusLeilao status;
 
+    @Size(max = 255, message = "A observação deve ter no máximo 255 caracteres")
     private String observacao;
 
+    @Positive(message = "O valor de incremento deve ser positivo")
     private Float valorIncremento;
 
+    @PositiveOrZero(message = "O lance mínimo deve ser positivo ou zero")
     private Float lanceMinimo;
 
     @ManyToOne

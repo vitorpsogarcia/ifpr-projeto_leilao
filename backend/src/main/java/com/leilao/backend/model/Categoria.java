@@ -1,6 +1,8 @@
 package com.leilao.backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -18,8 +20,11 @@ public class Categoria {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotBlank(message = "O nome da categoria é obrigatório")
+    @Size(min = 3, max = 100, message = "O nome da categoria deve ter entre 3 e 100 caracteres")
     private String nome;
 
+    @Size(max = 255, message = "A observação deve ter no máximo 255 caracteres")
     private String observacao;
 
     @ManyToOne

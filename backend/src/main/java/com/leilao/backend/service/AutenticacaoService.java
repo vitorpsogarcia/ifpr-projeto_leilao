@@ -4,7 +4,6 @@ import com.leilao.backend.dto.PessoaAutenticacaoDTO;
 import com.leilao.backend.dto.PessoaRequestDTO;
 import com.leilao.backend.exception.UsuarioJaExisteExcecao;
 import com.leilao.backend.model.Pessoa;
-import com.leilao.backend.model.PessoaPerfil;
 import com.leilao.backend.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,7 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.leilao.backend.security.JwtService;
+import com.leilao.backend.security.TokenService;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -28,7 +27,7 @@ public class AutenticacaoService {
 
 
     @Autowired
-    private JwtService jwtService;
+    private TokenService tokenService;
     @Autowired
     private PessoaRepository pessoaRepository;
 
@@ -44,7 +43,7 @@ public class AutenticacaoService {
             dto.setEmail(pessoaBanco.get().getEmail());
             dto.setNome(pessoaBanco.get().getNome());
             dto.setId(pessoaBanco.get().getId());
-            dto.setToken(jwtService.generateToken(authentication.getName()));
+            dto.setToken(tokenService.gerarToken(pessoaBanco.get()));
         }
 
         return dto;
@@ -71,4 +70,3 @@ public class AutenticacaoService {
         return true;
     }
 }
-

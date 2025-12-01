@@ -1,6 +1,8 @@
 package com.leilao.backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -19,8 +21,10 @@ public class Lance {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Positive(message = "O valor do lance deve ser positivo")
     private Float valorLance;
 
+    @PastOrPresent(message = "A data do lance não pode ser no futuro")
     private LocalDateTime dataHora;
 
     @ManyToOne
