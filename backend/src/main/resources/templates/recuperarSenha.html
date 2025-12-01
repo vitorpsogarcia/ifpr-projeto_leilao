@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Recuperação de Senha</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <p>
+        Olá, <span th:text="${nome}"></span>!
+    </p>
+    <p>
+        Você solicitou a recuperação de senha. Utilize o código abaixo para redefinir sua senha:
+    </p>
+    <p>
+        <strong><span th:text="${codigo}"></span></strong>
+    </p>
+    <p>
+        Este código é válido por 10 minutos.
+    </p>
+    <p>
+        Se você não solicitou a recuperação de senha, ignore este e-mail.
+    </p>
+</body>
+</html>
+

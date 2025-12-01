@@ -1,8 +1,11 @@
 package com.leilao.backend.controller;
 
+import com.leilao.backend.dto.AlterarSenhaDTO;
 import com.leilao.backend.dto.PessoaAutenticacaoDTO;
 import com.leilao.backend.dto.PessoaRequestDTO;
+import com.leilao.backend.dto.RecuperarSenhaDTO;
 import com.leilao.backend.service.AutenticacaoService;
+import com.leilao.backend.service.PessoaService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.coyote.Response;
@@ -17,6 +20,9 @@ public class AuthController {
 
     @Autowired
     private AutenticacaoService autenticacaoService;
+
+    @Autowired
+    private PessoaService pessoaService;
 
     @Value("${jwt.expiration}")
     private Long expiration;
@@ -47,5 +53,15 @@ public class AuthController {
     public ResponseEntity<Boolean> registrar(@RequestBody PessoaRequestDTO pessoaRequestDTO) {
         this.autenticacaoService.registrar(pessoaRequestDTO);
         return ResponseEntity.ok(true);
+    }
+
+    @PostMapping("/recuperar-senha")
+    public ResponseEntity<String> recuperarSenha(@RequestBody RecuperarSenhaDTO recuperarSenhaDTO) {
+        return ResponseEntity.ok(pessoaService.solicitarRecuperacaoSenha(recuperarSenhaDTO));
+    }
+
+    @PostMapping("/alterar-senha")
+    public ResponseEntity<String> alterarSenha(@RequestBody AlterarSenhaDTO alterarSenhaDTO) throws Exception {
+        return ResponseEntity.ok(pessoaService.alterarSenha(alterarSenhaDTO));
     }
 }

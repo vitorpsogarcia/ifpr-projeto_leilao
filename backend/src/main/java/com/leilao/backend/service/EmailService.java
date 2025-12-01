@@ -1,6 +1,7 @@
 package com.leilao.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -15,6 +16,9 @@ import jakarta.mail.internet.MimeMessage;
 @Service
 public class EmailService {
 
+    @Value("${spring.mail.from}")
+    private String from;
+
     @Autowired
     private JavaMailSender javaMail;
 
@@ -24,6 +28,7 @@ public class EmailService {
     @Async
     public void enviarEmailSimples(String para, String assunto, String mensagem) {
         SimpleMailMessage simpleMail = new SimpleMailMessage();
+        simpleMail.setFrom(from);
         simpleMail.setTo(para);
         simpleMail.setSubject(assunto);
         simpleMail.setText(mensagem);
@@ -39,6 +44,7 @@ public class EmailService {
         MimeMessageHelper helper;
         try {
             helper = new MimeMessageHelper(message, true);
+            helper.setFrom(from);
             helper.setTo(para);
             helper.setSubject(assunto);
             helper.setText(process, true);
