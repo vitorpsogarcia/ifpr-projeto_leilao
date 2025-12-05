@@ -1,15 +1,19 @@
 package com.leilao.backend.controller;
 
 import com.leilao.backend.model.Leilao;
+import com.leilao.backend.model.Pessoa;
 import com.leilao.backend.service.LeilaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/leiloes")
+@PreAuthorize("hasRole('VENDEDOR') or hasRole('ADMIN')")
 public class LeilaoController {
 
     @Autowired
@@ -17,6 +21,8 @@ public class LeilaoController {
 
     @PostMapping
     public ResponseEntity<Leilao> criar(@RequestBody Leilao leilao) {
+        Pessoa pessoa = (Pessoa) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        leilao.setPessoa(pessoa);
         return ResponseEntity.ok(service.criar(leilao));
     }
 
@@ -49,4 +55,3 @@ public class LeilaoController {
         return ResponseEntity.ok().build();
     }
 }
-

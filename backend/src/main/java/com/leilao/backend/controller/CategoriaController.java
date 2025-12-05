@@ -4,12 +4,14 @@ import com.leilao.backend.model.Categoria;
 import com.leilao.backend.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/categorias")
+@RequestMapping("/categoria")
+@PreAuthorize("hasRole('ADMIN')")
 public class CategoriaController {
 
     @Autowired
@@ -49,4 +51,3 @@ public class CategoriaController {
         return ResponseEntity.ok().build();
     }
 }
-

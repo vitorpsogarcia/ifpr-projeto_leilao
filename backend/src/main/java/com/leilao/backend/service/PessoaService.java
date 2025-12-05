@@ -2,7 +2,6 @@ package com.leilao.backend.service;
 
 import com.leilao.backend.dto.AlterarSenhaDTO;
 import com.leilao.backend.dto.RecuperarSenhaDTO;
-import com.leilao.backend.utils.GenericUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +40,7 @@ public class PessoaService implements UserDetailsService {
 
     public Pessoa inserir(Pessoa pessoa) {
         Pessoa pessoaCadastrada = pessoaRepository.save(pessoa);
-        // emailService.enviarEmailSimples(pessoaCadastrada.getEmail(), "Cadastrado com
-        // Sucesso", "Cadastro no Sistema de Leilão XXX foi feito com sucesso!");
+         emailService.enviarEmailSimples(pessoaCadastrada.getEmail(), "Cadastrado com Sucesso", "Cadastro no Sistema de Leilão XXX foi feito com sucesso!");
         enviarEmailSucesso(pessoaCadastrada);
         return pessoaCadastrada;
     }
@@ -54,15 +52,25 @@ public class PessoaService implements UserDetailsService {
     }
 
     public Pessoa alterar(Pessoa pessoa) {
-        // return pessoaRepository.save(pessoa);
-        Pessoa pessoaBanco = buscarPorId(pessoa.getId());
-        Pessoa pessoaAtualizada = GenericUpdater.atualizaCampos(pessoaBanco, pessoa);
-        return pessoaRepository.save(pessoaAtualizada);
+        Pessoa pessoaBanco = pessoaRepository.findById(pessoa.getId()).orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+
+        if (pessoa.getNome() != null) pessoaBanco.setNome(pessoa.getNome());
+        if (pessoa.getEmail() != null) pessoaBanco.setEmail(pessoa.getEmail());
+        if (pessoa.getCpf() != null) pessoaBanco.setCpf(pessoa.getCpf());
+
+        if (pessoa.getCategorias() != null) {
+            pessoaBanco.getCategorias().clear();
+            pessoaBanco.getCategorias().addAll(pessoa.getCategorias());
+        }
+
+        if (pessoa.getPerfis() != null) pessoaBanco.setPerfis(pessoa.getPerfis());
+
+        return pessoaRepository.save(pessoaBanco);
     }
 
     public void excluir(Long id) {
-        Pessoa pessoaBanco = buscarPorId(id);
-        pessoaRepository.delete(pessoaBanco);
+        Pessoa pessoa = pessoaRepository.findById(id).get();
+        pessoaRepository.delete(pessoa);
     }
 
     public Pessoa buscarPorId(Long id) {

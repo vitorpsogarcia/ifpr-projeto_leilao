@@ -1,5 +1,6 @@
 package com.leilao.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,7 +17,7 @@ import java.util.Date;
 public class Feedback {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String comentario;
@@ -46,4 +47,9 @@ public class Feedback {
     @Column(name="excluido_em", nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Date excluidoEm;
+
+    @ManyToOne
+    @JoinColumn(name = "pessoa_id")
+    @JsonBackReference("pessoa-feedbacks")
+    private Pessoa pessoa;
 }

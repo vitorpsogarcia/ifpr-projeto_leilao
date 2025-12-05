@@ -39,7 +39,7 @@ public class PessoaController {
         return ResponseEntity.ok(pessoaService.inserir(pessoa));
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<Pessoa> alterar(@Valid @RequestBody Pessoa pessoa) {
         return ResponseEntity.ok(pessoaService.alterar(pessoa));
     }

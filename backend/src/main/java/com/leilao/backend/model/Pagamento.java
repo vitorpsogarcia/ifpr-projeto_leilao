@@ -1,5 +1,6 @@
 package com.leilao.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,7 +17,7 @@ import java.util.Date;
 public class Pagamento {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Float valor;
@@ -27,6 +28,7 @@ public class Pagamento {
 
     @OneToOne
     @JoinColumn(name = "leilao_id")
+    @JsonBackReference("leilao-pagamento")
     private Leilao leilao;
 
     @Column(name="criado_em")

@@ -1,5 +1,6 @@
 package com.leilao.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -9,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,7 +19,7 @@ import java.util.Date;
 public class Categoria {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "O nome da categoria é obrigatório")
@@ -44,4 +46,8 @@ public class Categoria {
     @Column(name="excluido_em", nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Date excluidoEm;
+
+    @OneToMany(mappedBy = "categoria")
+    @JsonIgnore
+    private List<Leilao> leiloes;
 }

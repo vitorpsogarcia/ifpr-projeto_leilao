@@ -1,5 +1,6 @@
 package com.leilao.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
@@ -18,13 +19,14 @@ import java.util.Date;
 public class Lance {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Positive(message = "O valor do lance deve ser positivo")
     private Float valorLance;
 
     @PastOrPresent(message = "A data do lance não pode ser no futuro")
+    @CreatedDate
     private LocalDateTime dataHora;
 
     @ManyToOne
@@ -33,6 +35,7 @@ public class Lance {
 
     @ManyToOne
     @JoinColumn(name = "leilao_id")
+    @JsonBackReference("leilao-lances")
     private Leilao leilao;
 
     @Column(name="criado_em")

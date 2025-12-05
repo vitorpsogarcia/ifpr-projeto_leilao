@@ -1,5 +1,7 @@
 package com.leilao.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.leilao.backend.enums.StatusLeilao;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -19,7 +21,7 @@ import java.util.List;
 public class Leilao {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "O título do leilão é obrigatório")
@@ -53,19 +55,23 @@ public class Leilao {
 
     @ManyToOne
     @JoinColumn(name = "pessoa_id")
+    @JsonBackReference("pessoa-leiloes")
     private Pessoa pessoa;
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
-    @OneToMany(mappedBy = "leilao")
+    @OneToMany(mappedBy = "leilao", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("leilao-imagens")
     private List<Imagem> imagens;
 
-    @OneToMany(mappedBy = "leilao")
+    @OneToMany(mappedBy = "leilao", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("leilao-lances")
     private List<Lance> lances;
 
-    @OneToOne(mappedBy = "leilao")
+    @OneToOne(mappedBy = "leilao", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("leilao-pagamento")
     private Pagamento pagamento;
 
     @Column(name="criado_em")

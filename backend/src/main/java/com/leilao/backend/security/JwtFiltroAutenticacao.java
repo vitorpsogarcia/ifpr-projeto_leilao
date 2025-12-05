@@ -73,7 +73,7 @@ public class JwtFiltroAutenticacao extends OncePerRequestFilter {
     }
 
     private boolean isPublicRoute(String uri) {
-        return uri.startsWith("/autenticacao/");
+        return uri.startsWith("/autenticacao/") || uri.startsWith("/categoria/") || uri.equals("/leilao/public");
     }
 }
 

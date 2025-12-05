@@ -1,5 +1,6 @@
 package com.leilao.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,7 +17,7 @@ import java.util.Date;
 public class Imagem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private LocalDateTime dataHoraCadastro;
@@ -25,6 +26,7 @@ public class Imagem {
 
     @ManyToOne
     @JoinColumn(name = "leilao_id")
+    @JsonBackReference("leilao-imagens")
     private Leilao leilao;
 
     @Column(name="criado_em")

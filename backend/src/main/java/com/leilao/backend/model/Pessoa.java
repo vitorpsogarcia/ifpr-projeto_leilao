@@ -1,9 +1,9 @@
 package com.leilao.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.leilao.backend.enums.TipoPerfil;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Setter;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -14,9 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -25,7 +23,7 @@ import java.util.stream.Collectors;
 @EntityListeners(AuditingEntityListener.class)
 public class Pessoa implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "{validation.name.notblank}")
@@ -57,14 +55,11 @@ public class Pessoa implements UserDetails {
     @Column(name = "foto_perfil", columnDefinition = "BLOB")
     private byte[] fotoPerfil;
 
-    @OneToMany(
-      fetch = FetchType.EAGER,
-      mappedBy = "pessoa",
-      cascade = CascadeType.ALL,
-      orphanRemoval = true
-    )
-    @Setter(AccessLevel.NONE)
-    private List<PessoaPerfil> pessoaPerfil;
+    @ElementCollection(targetClass = TipoPerfil.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "pessoa_perfis", joinColumns = @JoinColumn(name = "pessoa_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "perfil", nullable = false)
+    private Set<TipoPerfil> perfis = new HashSet<>(Collections.singletonList(TipoPerfil.COMPRADOR));
 
     @OneToMany(
       fetch = FetchType.LAZY,
@@ -101,6 +96,7 @@ public class Pessoa implements UserDetails {
       cascade = CascadeType.ALL,
       orphanRemoval = true
     )
+    @JsonManagedReference("pessoa-leiloes")
     private List<Leilao> leiloes;
 
     @OneToMany(
@@ -110,7 +106,18 @@ public class Pessoa implements UserDetails {
       cascade = CascadeType.ALL,
       orphanRemoval = true
     )
+    @JsonIgnore
     private List<Lance> lances;
+
+    @OneToMany(
+      fetch = FetchType.LAZY,
+      mappedBy = "pessoa",
+      targetEntity =  Feedback.class,
+      cascade = CascadeType.ALL,
+      orphanRemoval = true
+    )
+    @JsonManagedReference("pessoa-feedbacks")
+    private List<Feedback> feedbacks;
 
     @Column(name="criado_em")
     @CreatedDate
@@ -126,30 +133,16 @@ public class Pessoa implements UserDetails {
     @Temporal(TemporalType.TIMESTAMP)
     private Date excluidoEm;
 
-    public void setPessoaPerfil(List<PessoaPerfil> pessoaPerfil) {
-        for (PessoaPerfil p : pessoaPerfil) {
-            p.setPessoa(this);
-        }
-
-        this.pessoaPerfil = pessoaPerfil;
-    }
-
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return pessoaPerfil
-          .stream()
-          .map(
-            perfil -> new SimpleGrantedAuthority(
-              perfil
-                .getPerfil().getTipo().name()
-            )
-          )
-          .collect(
-            Collectors.toList()
-          );
+        return perfis.stream()
+                .map(perfil -> new SimpleGrantedAuthority("ROLE_" + perfil.name()))
+                .collect(Collectors.toList());
     }
 
     @Override
+    @JsonIgnore
     public String getPassword() {
         return this.senha;
     }

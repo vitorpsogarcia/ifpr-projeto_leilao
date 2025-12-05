@@ -43,6 +43,7 @@ public class AutenticacaoService {
             dto.setEmail(pessoaBanco.get().getEmail());
             dto.setNome(pessoaBanco.get().getNome());
             dto.setId(pessoaBanco.get().getId());
+            dto.setPerfis(pessoaBanco.get().getPerfis());
             dto.setToken(tokenService.gerarToken(pessoaBanco.get()));
         }
 
