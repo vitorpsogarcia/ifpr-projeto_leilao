@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/categoria")
+@RequestMapping("/categorias")
 @PreAuthorize("hasRole('ADMIN')")
 public class CategoriaController {
 

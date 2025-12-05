@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/lance")
+@RequestMapping("/lances")
 @PreAuthorize("hasRole('VENDEDOR') or hasRole('ADMIN')")
 public class LanceController {
 
